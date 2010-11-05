@@ -1,0 +1,2 @@
+gcc common.c rank.c -o rank
+gcc common.c unrank.c -o unrank
