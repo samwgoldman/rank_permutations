@@ -1,45 +1,66 @@
+#include <inttypes.h>
 #include <stdlib.h>
+#include <string.h>
+#include <assert.h>
 #include <stdio.h>
 #include "common.h";
 
-int* create_identity_permutation(int n)
+uint32_t* create_identity_permutation(uint32_t n)
 {
-  int i;
-  int *p = malloc(n * sizeof(int));
+  uint32_t i;
+  uint32_t *p = malloc(n * sizeof(uint32_t));
   for (i = 0; i < n; i++)
     p[i] = i;
   return p;
 }
 
-int* create_random_permutation(int n)
+uint32_t* create_random_permutation(uint32_t n)
 {
-  int i;
-  int* p = create_identity_permutation(n);
+  uint32_t i;
+  uint32_t* p = create_identity_permutation(n);
   for (i = n - 1; i > 0; i--)
   {
-    int j = arc4random() % (i + 1);
-    swap(&p[i], &p[j]);
+    uint32_t j = arc4random() % (i + 1);
+    swap(&p[i], &p[j], sizeof(uint32_t));
   }
   return p;
 }
 
-int* inverse_permutation(int n, int* p)
+uint32_t* inverse_permutation(uint32_t n, uint32_t* p)
 {
-  int i;
-  int* inverse = malloc(n * sizeof(n));
+  uint32_t i;
+  uint32_t* inverse = malloc(n * sizeof(uint32_t));
   for (i = 0; i < n; i++)
     inverse[p[i]] = i;
   return inverse;
 }
 
-void print_permutation(int n, int *p)
+uint64_t num_permutations(uint32_t n, uint32_t k)
 {
-  int i;
-  for (i = 0; i < n; i++)
-    printf("%d ", p[i]);
+  return factorial(n) / factorial(n - k);
 }
 
-int factorial(int n)
+uint32_t* read_permutation(uint32_t n)
+{
+  uint32_t* p = malloc(n * sizeof(uint32_t));
+  uint32_t i;
+  for (i = 0; i < n; i++)
+  {
+    uint32_t val;
+    scanf("%" PRIu32, &val);
+    p[i] = val;
+  }
+  return p;
+}
+
+void print_permutation(uint32_t n, uint32_t *p)
+{
+  uint32_t i;
+  for (i = 0; i < n; i++)
+    printf("%" PRIu32 "\n", p[i]);
+}
+
+uint64_t factorial(uint64_t n)
 {
   if (n <= 1)
     return 1;
@@ -47,9 +68,14 @@ int factorial(int n)
     return n * factorial(n - 1);
 }
 
-void swap(int* a, int* b)
+void swap(void* restrict a, void* restrict b, size_t size)
 {
-  int tmp = *a;
-  *a = *b;
-  *b = tmp;
+  void *tmp = malloc(size);
+  assert(tmp);
+  
+  memcpy(tmp, b, size);
+  memcpy(b, a, size);
+  memcpy(a, tmp, size);
+  
+  free(tmp);
 }
