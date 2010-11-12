@@ -14,18 +14,6 @@ uint32_t* create_identity_permutation(uint32_t n)
   return p;
 }
 
-uint32_t* create_random_permutation(uint32_t n)
-{
-  uint32_t i;
-  uint32_t* p = create_identity_permutation(n);
-  for (i = n - 1; i > 0; i--)
-  {
-    uint32_t j = arc4random() % (i + 1);
-    swap(&p[i], &p[j], sizeof(uint32_t));
-  }
-  return p;
-}
-
 uint32_t* inverse_permutation(uint32_t n, uint32_t* p)
 {
   uint32_t i;
@@ -33,11 +21,6 @@ uint32_t* inverse_permutation(uint32_t n, uint32_t* p)
   for (i = 0; i < n; i++)
     inverse[p[i]] = i;
   return inverse;
-}
-
-uint64_t num_permutations(uint32_t n, uint32_t k)
-{
-  return factorial(n) / factorial(n - k);
 }
 
 uint32_t* read_permutation(uint32_t n)
@@ -58,14 +41,6 @@ void print_permutation(uint32_t n, uint32_t *p)
   uint32_t i;
   for (i = 0; i < n; i++)
     printf("%" PRIu32 "\n", p[i]);
-}
-
-uint64_t factorial(uint64_t n)
-{
-  if (n <= 1)
-    return 1;
-  else
-    return n * factorial(n - 1);
 }
 
 void swap(void* restrict a, void* restrict b, size_t size)
