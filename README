@@ -1,2 +1,14 @@
-gcc common.c rank.c -o rank
-gcc common.c unrank.c -o unrank
+C programs to rank and unrank k-permutations in linear time.
+
+Usage: rank n <k>
+Description:
+  n is the length of the set.
+  k is the length of the permutation. If omitted, k is set to n. k must be <= n.
+  rank reads k numbers from stdin, which must be 0 to k - 1, separated by \n.
+  output is the rank of the input k-permutation of n.
+
+Usage: unrank r n <k>
+  r is the desired rank.
+  n is the length of the set.
+  k is the length of the permutation. If omitted, k is set to n. k must be <= n.
+  output is the k-permutation of n of rank r.
